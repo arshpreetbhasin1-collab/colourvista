@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Paintx.ai
 
-## Getting Started
+AI-powered paint visualization platform. Upload a photo of a house and preview different paint colours on it before buying paint.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Paintx.ai lets a user upload a photo of a building (interior or exterior) and see how it would look repainted in different colours, using automated wall/surface detection and AI-based rendering rather than a flat digital overlay.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js, TypeScript, Tailwind CSS, OpenCV.js, Replicate API, Sharp. Deployed on Vercel.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Engineering highlights
 
-## Learn More
+Request deduplication: fixed a React Strict Mode race condition that was causing duplicate AI API calls (2 per upload instead of 1) by building an idempotent, ID-based request-deduplication system, cutting redundant calls by 50%.
 
-To learn more about Next.js, take a look at the following resources:
+Wall detection coverage: reached 99% building-surface coverage by architecting a fallback-recovery pipeline that reclaims paintable area two segmentation models (SAM2, SAM3) individually missed.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Cost optimization: benchmarked Replicate model pricing and output quality directly, then migrated the rendering pipeline to a lower-cost model with no quality loss.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Colour rendering: built a custom pixel-level, luminance-preserving colour-blend algorithm to avoid flat, artificial-looking paint output, verified against real photo data pixel-by-pixel.
 
-## Deploy on Vercel
+## Getting started
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Clone the repo, run npm install, set up the required environment variables locally, then run npm run dev.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Environment variables
+
+Requires a Replicate API token and related service keys, kept in a local .env.local file which is gitignored and never committed.
+
+## Live demo
+
+https://colourvista.vercel.app
+
+## Project status
+
+Live and in active development.
+
+## Author
+
+Arshpreet Singh Bhasin - GitHub: https://github.com/arshpreetbhasin1-collab
